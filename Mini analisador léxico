@@ -1,0 +1,46 @@
+import re
+
+# Código-fonte de exemplo (como se fosse digitado por um programador)
+codigo = """
+int x = 10;
+float y = 5.2;
+if (x > y) {
+    x = x + 1;
+}
+"""
+
+# Definição dos tipos de tokens e seus padrões
+tokens = [
+    ("PALAVRA_RESERVADA", r"\b(int|float|if|else|while|for|return)\b"),
+    ("IDENTIFICADOR", r"\b[a-zA-Z_]\w*\b"),
+    ("NUMERO", r"\b\d+(\.\d+)?\b"),
+    ("OPERADOR", r"[=+\-*/><]"),
+    ("PONTUACAO", r"[;(){}]"),
+    ("ESPACO", r"\s+"),
+]
+
+# Analisador léxico
+def analisador_lexico(codigo):
+    resultado = []
+    while codigo:
+        encontrado = False
+        for tipo, padrao in tokens:
+            regex = re.match(padrao, codigo)
+            if regex:
+                texto = regex.group(0)
+                if tipo != "ESPACO":  # ignora espaços e quebras de linha
+                    resultado.append((tipo, texto))
+                codigo = codigo[len(texto):]
+                encontrado = True
+                break
+        if not encontrado:
+            raise ValueError(f"Erro léxico: símbolo não reconhecido em '{codigo[:10]}'")
+    return resultado
+
+# Execução
+resultado = analisador_lexico(codigo)
+
+# Exibição do resultado
+print("Tokens reconhecidos:")
+for tipo, texto in resultado:
+    print(f"{tipo:<20} -> {texto}")
