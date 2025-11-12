@@ -1,6 +1,5 @@
 import re
 
-# Código-fonte de exemplo (como se fosse digitado por um programador)
 codigo = """
 int x = 10;
 float y = 5.2;
